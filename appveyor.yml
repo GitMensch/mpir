@@ -9,12 +9,6 @@ environment:
   matrix:
     - COMPILER: MinGW-w64
       ABI: 32
-      LIBRARY: shared
-    - COMPILER: MinGW-w64
-      ABI: 64
-      LIBRARY: static
-    - COMPILER: MinGW-w64
-      ABI: 32
       LIBRARY: static
       CONFIG_CXX: --enable-cxx
       CONFIG_GMP: --enable-gmpcompat
