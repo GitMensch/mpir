@@ -5,12 +5,20 @@ echo && echo build: ./autogen.sh
 ./autogen.sh
 
 case "$LIBRARY" in
-	"static") LIB="--enable-static --disable-shared";;
-	"shared") LIB="--disable-static --enable-shared";;
+	"static") CONFIGURE_FLAGS="--enable-static --disable-shared";;
+	"shared") CONFIGURE_FLAGS="--disable-static --enable-shared";;
+esac
+case "$FEATURE" in
+	*GMP*) CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gmpcompat";;
+		MODE="$MODE-gmp";;
+esac
+case "$FEATURE" in
+	*CXX*) CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-cxx"
+		MODE="$MODE-cxx";;
 esac
 
-echo && echo build: ./configure ABI=$ABI $LIB $CONFIG_CXX $CONFIG_GMP
-./configure ABI=$ABI $LIB $CONFIG_CXX $CONFIG_GMP
+echo && echo build: ./configure ABI=$ABI $CONFIGURE_FLAGS
+./configure ABI=$ABI $CONFIGURE_FLAGS --prefix=/usr/local
 
 echo && echo build: make
 make
@@ -23,12 +31,8 @@ make check
 echo && echo build: make dist
 make dist
 
-if test "x$CONFIG_GMP" != "x"; then
-	if test "x$CONFIG_CXX" != "x"; then
-		MODE="C++"
-	else
-		MODE=""
-	fi
-	echo && echo build: make install DESTDIR=$(pwd)/bin$ABI$MODE-$LIBRARY
-	make install DESTDIR=$(pwd)/bin$ABI$MODE-$LIBRARY
+if test "x$FEATURE" != "x"; then
+	echo && echo build: make install DESTDIR=$(pwd)/package
+	make install DESTDIR=$(pwd)/package && cd package/usr/local && \
+		zip -9 -r ../../../bin$ABI$MODE-$LIBRARY.zip *
 fi
