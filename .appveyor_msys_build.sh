@@ -9,12 +9,14 @@ case "$LIBRARY" in
 	"shared") CONFIGURE_FLAGS="--disable-static --enable-shared";;
 esac
 case "$FEATURE" in
-	*GMP*) CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gmpcompat";;
-		MODE="$MODE-gmp";;
+	*GMP*) CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-gmpcompat"
+		MODE="$MODE-gmp"
+		;;
 esac
 case "$FEATURE" in
 	*CXX*) CONFIGURE_FLAGS="$CONFIGURE_FLAGS --enable-cxx"
-		MODE="$MODE-cxx";;
+		MODE="$MODE-cxx"
+		;;
 esac
 
 echo && echo build: ./configure ABI=$ABI $CONFIGURE_FLAGS
