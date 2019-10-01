@@ -9,16 +9,30 @@ environment:
   matrix:
     - COMPILER: MinGW-w64
       ABI: 32
-      LIB: --enable-static --disable-shared
+      LIBRARY: shared
+    - COMPILER: MinGW-w64
+      ABI: 64
+      LIBRARY: static
     - COMPILER: MinGW-w64
       ABI: 32
-      LIB: --disable-static --enable-shared
+      LIBRARY: static
+      CONFIG_CXX: --enable-cxx
+      CONFIG_GMP: --enable-gmpcompat
+    - COMPILER: MinGW-w64
+      ABI: 32
+      LIBRARY: shared
+      CONFIG_CXX: --enable-cxx
+      CONFIG_GMP: --enable-gmpcompat
     - COMPILER: MinGW-w64
       ABI: 64
-      LIB: --enable-static --disable-shared
+      LIBRARY: static
+      CONFIG_CXX: --enable-cxx
+      CONFIG_GMP: --enable-gmpcompat
     - COMPILER: MinGW-w64
       ABI: 64
-      LIB: --disable-static --enable-shared
+      LIBRARY: shared
+      CONFIG_CXX: --enable-cxx
+      CONFIG_GMP: --enable-gmpcompat
 
 install:
   - if [%COMPILER%]==[MinGW-w64] C:\msys64\usr\bin\bash -lc "pacman --noconfirm -S %MINGW_PREREQ%"
@@ -34,3 +48,5 @@ cache:
 artifacts:
   - path: mpir-3.*
     name: source tarball
+  - path: bin*
+    name: binaries
